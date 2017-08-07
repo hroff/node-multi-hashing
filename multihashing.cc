@@ -32,6 +32,7 @@ extern "C" {
     #include "jh.h"
     #include "x5.h"
     #include "c11.h"
+    #include "lbry.h"
     #include "Lyra2REV2.h"
     #include "Lyra2Z.h"
 }
@@ -395,6 +396,28 @@ Handle<Value> decred(const Arguments& args) {
     uint32_t input_len = Buffer::Length(target);
 
     decred_hash(input, output, input_len);
+
+    Buffer* buff = Buffer::New(output, 32);
+    return scope.Close(buff->handle_);
+}
+
+Handle<Value> lbry(const Arguments& args) {
+    HandleScope scope;
+
+    if (args.Length() < 1)
+        return except("You must provide one argument.");
+
+    Local<Object> target = args[0]->ToObject();
+
+    if(!Buffer::HasInstance(target))
+        return except("Argument should be a buffer object.");
+
+    char * input = Buffer::Data(target);
+    char output[32];
+
+    uint32_t input_len = Buffer::Length(target);
+
+    lbry_hash(input, output, input_len);
 
     Buffer* buff = Buffer::New(output, 32);
     return scope.Close(buff->handle_);
@@ -854,6 +877,7 @@ void init(Handle<Object> exports) {
     exports->Set(String::NewSymbol("dcrypt"), FunctionTemplate::New(dcrypt)->GetFunction());
     exports->Set(String::NewSymbol("jh"), FunctionTemplate::New(jh)->GetFunction());
     exports->Set(String::NewSymbol("c11"), FunctionTemplate::New(c11)->GetFunction());
+    exports->Set(String::NewSymbol("lbry"), FunctionTemplate::New(lbry)->GetFunction());
     exports->Set(String::NewSymbol("lyra2rev2"), FunctionTemplate::New(lyra2rev2)->GetFunction());
     exports->Set(String::NewSymbol("lyra2z"), FunctionTemplate::New(lyra2z)->GetFunction());
 }
