@@ -33,7 +33,7 @@ extern "C" {
     #include "x5.h"
     #include "c11.h"
     #include "lbry.h"
-    #include "Lyra2REV2.h"
+    #include "Lyra2RE.h"
     #include "Lyra2Z.h"
 }
 
@@ -801,7 +801,7 @@ Handle<Value> c11(const Arguments& args) {
     return scope.Close(buff->handle_);
 }
 
-Handle<Value> lyra2rev2(const Arguments& args) {
+Handle<Value> lyra2re2(const Arguments& args) {
     HandleScope scope;
 
     if (args.Length() < 1)
@@ -817,7 +817,7 @@ Handle<Value> lyra2rev2(const Arguments& args) {
 
     uint32_t input_len = Buffer::Length(target);
 
-    lyra2rev2_hash(input, output);
+    lyra2re2_hash(input, output);
 
     Buffer* buff = Buffer::New(output, 32);
     return scope.Close(buff->handle_);
@@ -878,7 +878,7 @@ void init(Handle<Object> exports) {
     exports->Set(String::NewSymbol("jh"), FunctionTemplate::New(jh)->GetFunction());
     exports->Set(String::NewSymbol("c11"), FunctionTemplate::New(c11)->GetFunction());
     exports->Set(String::NewSymbol("lbry"), FunctionTemplate::New(lbry)->GetFunction());
-    exports->Set(String::NewSymbol("lyra2rev2"), FunctionTemplate::New(lyra2rev2)->GetFunction());
+    exports->Set(String::NewSymbol("lyra2re2"), FunctionTemplate::New(lyra2re2)->GetFunction());
     exports->Set(String::NewSymbol("lyra2z"), FunctionTemplate::New(lyra2z)->GetFunction());
 }
 
