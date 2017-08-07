@@ -10,9 +10,6 @@
 void blake_hash(const char* input, char* output, uint32_t len)
 {
 	sph_blake256_context ctx_blake;
-
-	sph_blake256_set_rounds(14);
-
 	sph_blake256_init(&ctx_blake);
 	sph_blake256(&ctx_blake, input, len);
 	sph_blake256_close(&ctx_blake, output);
@@ -28,8 +25,6 @@ static void hexlify(char *hex, const unsigned char *bin, int len)
 void decred_hash(const char* input, char* output, uint32_t len)
 {
 	sph_blake256_context ctx_blake;
-
-	sph_blake256_set_rounds(14);
 
 	//uint32_t* in = (uint32_t*) input;
 	//fprintf(stderr, "decred input len=%u n=%08x %08x %08x %08x\n",
