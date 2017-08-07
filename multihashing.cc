@@ -378,6 +378,28 @@ Handle<Value> blake(const Arguments& args) {
     return scope.Close(buff->handle_);
 }
 
+Handle<Value> decred(const Arguments& args) {
+    HandleScope scope;
+
+    if (args.Length() < 1)
+        return except("You must provide one argument.");
+
+    Local<Object> target = args[0]->ToObject();
+
+    if(!Buffer::HasInstance(target))
+        return except("Argument should be a buffer object.");
+
+    char * input = Buffer::Data(target);
+    char output[32];
+
+    uint32_t input_len = Buffer::Length(target);
+
+    decred_hash(input, output, input_len);
+
+    Buffer* buff = Buffer::New(output, 32);
+    return scope.Close(buff->handle_);
+}
+
 Handle<Value> dcrypt(const Arguments& args) {
     HandleScope scope;
 
@@ -814,6 +836,7 @@ void init(Handle<Object> exports) {
     exports->Set(String::NewSymbol("groestl"), FunctionTemplate::New(groestl)->GetFunction());
     exports->Set(String::NewSymbol("groestlmyriad"), FunctionTemplate::New(groestlmyriad)->GetFunction());
     exports->Set(String::NewSymbol("blake"), FunctionTemplate::New(blake)->GetFunction());
+    exports->Set(String::NewSymbol("decred"), FunctionTemplate::New(decred)->GetFunction());
     exports->Set(String::NewSymbol("fugue"), FunctionTemplate::New(fugue)->GetFunction());
     exports->Set(String::NewSymbol("qubit"), FunctionTemplate::New(qubit)->GetFunction());
     exports->Set(String::NewSymbol("hefty1"), FunctionTemplate::New(hefty1)->GetFunction());
